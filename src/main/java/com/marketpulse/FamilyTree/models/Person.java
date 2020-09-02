@@ -1,5 +1,7 @@
 package com.marketpulse.FamilyTree.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,8 +13,10 @@ public class Person {
     String name;
     @Enumerated(EnumType.ORDINAL)
     Gender gender;
+    @JsonIgnore
     @OneToOne(optional = true,fetch = FetchType.LAZY)
     HouseHold family;
+    @JsonIgnore
     @OneToOne(optional = true,fetch = FetchType.LAZY)
     HouseHold parents;
 

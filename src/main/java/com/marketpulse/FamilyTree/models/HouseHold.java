@@ -15,11 +15,12 @@ public class HouseHold {
     @OneToMany()
     List<Person> children;
 
-    public HouseHold(Person person1, Person person2){
-        this.husband=person1.getGender().equals(Gender.MALE)?person1:person2;
-        this.wife=person1.getGender().equals(Gender.FEMALE)?person1:person2;
+    public HouseHold(Person person1, Person person2) {
+        this.husband = person1.getGender().equals(Gender.MALE) ? person1 : person2;
+        this.wife = person1.getGender().equals(Gender.FEMALE) ? person1 : person2;
     }
-    public HouseHold(){
+
+    public HouseHold() {
 
     }
 

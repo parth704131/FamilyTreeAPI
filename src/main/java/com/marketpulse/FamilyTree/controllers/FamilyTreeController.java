@@ -21,31 +21,40 @@ public class FamilyTreeController {
         if (value) {
             return new ResponseEntity("New Person Created", HttpStatus.OK);
         } else {
-            return new ResponseEntity("something wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity("something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("{person1-id}/{relation}/{person2-id}")
     public ResponseEntity addRelationBetweenTwoPerson(@PathVariable("person1-id") int person1Id
-    , @PathVariable("relation")Relation relation,@PathVariable("person2-id")int person2ID){
-        personService.addRelationShipBetweenTwoPerson(person1Id,relation,person2ID);
-        return new ResponseEntity("Relation Created",HttpStatus.OK);
+            , @PathVariable("relation") Relation relation, @PathVariable("person2-id") int person2ID) {
+        boolean success=personService.addRelationShipBetweenTwoPerson(person1Id, relation, person2ID);
+        if(success){
+            return new ResponseEntity("Relation Created", HttpStatus.OK);
+        }else {
+            return new ResponseEntity("Something went Wrong",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @GetMapping("{id}/sons")
-    public ResponseEntity findNumberOfSons(@PathVariable("id") int id){
-        int numberOfSon=personService.getNumOfSons(id);
-        return  new ResponseEntity(numberOfSon,HttpStatus.OK);
+    public ResponseEntity findNumberOfSons(@PathVariable("id") int id) {
+        int numberOfSon = personService.getNumOfSons(id);
+        return new ResponseEntity(numberOfSon, HttpStatus.OK);
     }
 
     @GetMapping("{id}/all-daughters")
-    public ResponseEntity findNumberOfAllDaughters(@PathVariable("id") int id){
-        int numberOfDaughters=personService.getNumOfDaughters(id);
-        return new ResponseEntity(numberOfDaughters,HttpStatus.OK);
+    public ResponseEntity findNumberOfAllDaughters(@PathVariable("id") int id) {
+        int numberOfDaughters = personService.getNumOfDaughters(id);
+        return new ResponseEntity(numberOfDaughters, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public Person getPerson(@PathVariable("id") int id){
-        return personService.getPersonById(id);
+    public ResponseEntity getPerson(@PathVariable("id") int id) {
+        Person person=personService.getPersonById(id);
+        if(person!=null){
+            return new ResponseEntity(person,HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }
