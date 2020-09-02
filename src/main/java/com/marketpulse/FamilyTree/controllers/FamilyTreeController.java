@@ -37,15 +37,15 @@ public class FamilyTreeController {
 
     }
 
-    @GetMapping("{id}/sons")
-    public ResponseEntity findNumberOfSons(@PathVariable("id") int id) {
-        int numberOfSon = personService.getNumOfSons(id);
+    @GetMapping("{name}/sons")
+    public ResponseEntity findNumberOfSons(@PathVariable("name") String name) {
+        int numberOfSon = personService.getNumOfSons(name);
         return new ResponseEntity(numberOfSon, HttpStatus.OK);
     }
 
-    @GetMapping("{id}/all-daughters")
-    public ResponseEntity findNumberOfAllDaughters(@PathVariable("id") int id) {
-        int numberOfDaughters = personService.getNumOfDaughters(id);
+    @GetMapping("{name}/all-daughters")
+    public ResponseEntity findNumberOfAllDaughters(@PathVariable("name") String name) {
+        int numberOfDaughters = personService.getNumOfDaughters(name);
         return new ResponseEntity(numberOfDaughters, HttpStatus.OK);
     }
 

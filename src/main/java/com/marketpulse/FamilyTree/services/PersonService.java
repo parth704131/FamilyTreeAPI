@@ -97,9 +97,9 @@ public class PersonService {
         }
     }
 
-    public int getNumOfSons(int personId) {
+    public int getNumOfSons(String name) {
         int numberOfSon = 0;
-        Person person = personRepository.findById(personId).get();
+        Person person = personRepository.findByName(name);
         if (person.getFamily() != null && person!=null) {
             List<Person> children = person.getFamily().getChildren();
             for (int i = 0; i < children.size(); i++) {
@@ -111,9 +111,9 @@ public class PersonService {
         return numberOfSon;
     }
 
-    public int getNumOfDaughters(int id) {
+    public int getNumOfDaughters(String name) {
         int numOfDaughters = 0;
-        Person person = personRepository.findById(id).get();
+        Person person = personRepository.findByName(name);
         if (person.getFamily() != null && person !=null) {
             List<Person> children = person.getFamily().getChildren();
             for (int i = 0; i < children.size(); i++) {
@@ -121,7 +121,7 @@ public class PersonService {
                     numOfDaughters++;
                 }
                 if (children.get(i).getFamily() != null) {
-                    numOfDaughters += getNumOfDaughters(children.get(i).getId());
+                    numOfDaughters += getNumOfDaughters(children.get(i).getName());
                 }
             }
         }
