@@ -37,4 +37,15 @@ public class FamilyTreeController {
         int numberOfSon=personService.getNumOfSons(id);
         return  new ResponseEntity(numberOfSon,HttpStatus.OK);
     }
+
+    @GetMapping("{id}/all-daughters")
+    public ResponseEntity findNumberOfAllDaughters(@PathVariable("id") int id){
+        int numberOfDaughters=personService.getNumOfDaughters(id);
+        return new ResponseEntity(numberOfDaughters,HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    public Person getPerson(@PathVariable("id") int id){
+        return personService.getPersonById(id);
+    }
 }

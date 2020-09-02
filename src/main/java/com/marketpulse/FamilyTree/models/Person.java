@@ -63,4 +63,5 @@ public class Person {
     public void setParents(HouseHold parents) {
         this.parents = parents;
     }
+
 }
