@@ -11,11 +11,14 @@ public class Person {
     String name;
     @Enumerated(EnumType.ORDINAL)
     Gender gender;
-    @OneToOne(optional = true)
+    @OneToOne(optional = true,fetch = FetchType.LAZY)
     HouseHold family;
-    @OneToOne(optional = true)
+    @OneToOne(optional = true,fetch = FetchType.LAZY)
     HouseHold parents;
 
+    public Person(){
+
+    }
     public Person(String name,Gender gender) {
         this.name=name;
         this.gender=gender;

@@ -12,12 +12,15 @@ public class HouseHold {
     Person husband;
     @OneToOne
     Person wife;
-    @OneToMany
+    @OneToMany()
     List<Person> children;
 
-    HouseHold(Person person1,Person person2){
+    public HouseHold(Person person1, Person person2){
         this.husband=person1.getGender().equals(Gender.MALE)?person1:person2;
         this.wife=person1.getGender().equals(Gender.FEMALE)?person1:person2;
+    }
+    public HouseHold(){
+
     }
 
     public int getId() {
