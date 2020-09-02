@@ -77,19 +77,14 @@ public class PersonService {
     }
 
     public boolean addChild(Person person, Person child) {
-        try {
-            person.getFamily().getChildren().add(child);
-            child.setParents(person.getFamily());
-            personRepository.save(person);
-            personRepository.save(child);
-            return true;
-        } catch (Exception e) {
-            logger.error("error while giving child parent relationship " + e);
-            return false;
-        }
+        return saveParentChildRelationship(person,child);
     }
 
     public boolean addParent(Person parent, Person child) {
+       return saveParentChildRelationship(parent,child);
+    }
+
+    public boolean saveParentChildRelationship(Person parent,Person child){
         try {
             child.setParents(parent.getFamily());
             parent.getFamily().getChildren().add(child);
@@ -132,7 +127,6 @@ public class PersonService {
         }
         return numOfDaughters;
     }
-
 
     public Person getPersonById(int id) {
         try {
