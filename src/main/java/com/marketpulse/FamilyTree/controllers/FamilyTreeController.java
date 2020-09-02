@@ -31,4 +31,10 @@ public class FamilyTreeController {
         personService.addRelationShipBetweenTwoPerson(person1Id,relation,person2ID);
         return new ResponseEntity("Relation Created",HttpStatus.OK);
     }
+
+    @GetMapping("{id}/sons")
+    public ResponseEntity findNumberOfSons(@PathVariable("id") int id){
+        int numberOfSon=personService.getNumOfSons(id);
+        return  new ResponseEntity(numberOfSon,HttpStatus.OK);
+    }
 }

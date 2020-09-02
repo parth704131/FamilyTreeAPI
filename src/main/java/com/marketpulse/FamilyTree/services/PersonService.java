@@ -66,4 +66,16 @@ public class PersonService {
         personRepository.save(person);
         personRepository.save(child);
     }
+
+    public int getNumOfSons(int personId){
+        int numberOfSon=0;
+        Person person=personRepository.findById(personId).get();
+        List<Person> children=person.getFamily().getChildren();
+        for(int i=0;i<children.size();i++){
+            if(children.get(i).getGender()==Gender.MALE){
+                numberOfSon++;
+            }
+        }
+        return numberOfSon;
+    }
 }
