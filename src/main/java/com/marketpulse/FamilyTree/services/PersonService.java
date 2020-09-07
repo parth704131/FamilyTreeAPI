@@ -36,24 +36,18 @@ public class PersonService {
         return false;
     }
 
-    public boolean addRelationShipBetweenTwoPerson(int person1Id, Relation relation, int person2ID) {
+    public boolean addRelationShipBetweenTwoPerson(int person1Id, Relation relation, int person2Id,int person3Id) {
         try {
             Person person1 = personRepository.findById(person1Id).get();
-            Person person2 = personRepository.findById(person2ID).get();
-            if (person1 != null && person2 != null) {
-                if (relation == Relation.SON) {
-                    return addChild(person2, person1);
-                } else if (relation == Relation.DAUGHTER) {
-                    return addChild(person2, person1);
-                } else if (relation == Relation.FATHER) {
-                    return addParent(person1, person2);
-                } else if (relation == Relation.SPOUSE) {
-                    return addSpouse(person1, person2);
-                } else if (relation == Relation.MOTHER) {
-                    return addParent(person1, person2);
-                } else {
-                    return false;
-                }
+            Person person2 = personRepository.findById(person2Id).get();
+            if(person3Id==0 && relation==Relation.SPOUSE){
+                return addSpouse(person1, person2);
+            }else if (person1 != null
+                        && person2 != null
+                        && person3Id!=0
+                        && (relation==Relation.SON || relation==Relation.DAUGHTER) ) {
+                Person person3=personRepository.findById(person3Id).get();
+                return addChildRelationShip(person2Id,person3Id,person1Id);
             }
         }catch (Exception e){
             logger.error("something went wrong at relation time"+e);
@@ -62,12 +56,33 @@ public class PersonService {
         return false;
     }
 
+    public boolean addChildRelationShip(int fatherId,int motherId,int childId){
+        Person father=personRepository.findById(fatherId).get();
+        Person child=personRepository.findById(childId).get();
+
+        HouseHold family=null;
+
+        List<HouseHold> families=father.getFamilies();
+        for (int i=0;i<families.size();i++)
+        {
+            if(families.get(i).getWife().getId()==motherId){
+                family=families.get(i);
+                break;
+            }
+        }
+        family.getChildren().add(child);
+        houseHoldRepository.save(family);
+        child.setParents(family);
+        personRepository.save(child);
+        return true;
+    }
+
     private boolean addSpouse(Person person1, Person person2) {
         try {
             HouseHold family = new HouseHold(person1, person2);
+            person1.getFamilies().add(family);
+            person2.getFamilies().add(family);
             houseHoldRepository.save(family);
-            person1.setFamily(family);
-            person2.setFamily(family);
             personRepository.save(person1);
             personRepository.save(person2);
             return true;
@@ -76,35 +91,16 @@ public class PersonService {
         }
     }
 
-    public boolean addChild(Person person, Person child) {
-        return saveParentChildRelationship(person,child);
-    }
-
-    public boolean addParent(Person parent, Person child) {
-       return saveParentChildRelationship(parent,child);
-    }
-
-    public boolean saveParentChildRelationship(Person parent,Person child){
-        try {
-            child.setParents(parent.getFamily());
-            parent.getFamily().getChildren().add(child);
-            personRepository.save(child);
-            personRepository.save(parent);
-            return true;
-        } catch (Exception e) {
-            logger.error("error while giving parent child relationship " + e);
-            return false;
-        }
-    }
-
     public int getNumOfSons(String name) {
         int numberOfSon = 0;
         Person person = personRepository.findByName(name);
-        if (person.getFamily() != null && person!=null) {
-            List<Person> children = person.getFamily().getChildren();
-            for (int i = 0; i < children.size(); i++) {
-                if (children.get(i).getGender() == Gender.MALE) {
-                    numberOfSon++;
+        if (person.getFamilies().size()>0 && person!=null) {
+            List<HouseHold> families = person.getFamilies();
+            for (int i = 0; i < families.size(); i++) {
+                for(int j=0;j<families.get(i).getChildren().size();j++){
+                    if(families.get(i).getChildren().get(j).getGender()==Gender.MALE){
+                        numberOfSon++;
+                    }
                 }
             }
         }
@@ -112,16 +108,22 @@ public class PersonService {
     }
 
     public int getNumOfDaughters(String name) {
+        Person person=personRepository.findByName(name);
+        return getNumOfDaughters(person);
+    }
+
+    public int getNumOfDaughters(Person person){
         int numOfDaughters = 0;
-        Person person = personRepository.findByName(name);
-        if (person.getFamily() != null && person !=null) {
-            List<Person> children = person.getFamily().getChildren();
-            for (int i = 0; i < children.size(); i++) {
-                if (children.get(i).getGender() == Gender.FEMALE) {
-                    numOfDaughters++;
-                }
-                if (children.get(i).getFamily() != null) {
-                    numOfDaughters += getNumOfDaughters(children.get(i).getName());
+        if (person.getFamilies().size() >0 && person !=null) {
+            List<HouseHold> families = person.getFamilies();
+            for (int i = 0; i < families.size(); i++) {
+                for(int j=0;j<families.get(i).getChildren().size();j++) {
+                    if (families.get(i).getChildren().get(j).getGender() == Gender.FEMALE) {
+                        numOfDaughters++;
+                    }
+                    if (families.get(i).getChildren().get(j).getFamilies().size()>0) {
+                        numOfDaughters += getNumOfDaughters(families.get(i).getChildren().get(j));
+                    }
                 }
             }
         }

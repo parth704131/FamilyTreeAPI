@@ -25,10 +25,15 @@ public class FamilyTreeController {
         }
     }
 
-    @PostMapping("{person1-id}/{relation}/{person2-id}")
+    @PostMapping(value = {"{person1-id}/{relation}/{person2-id}",
+                            "{person1-id}/{relation}/{person2-id}/{person3-id}"})
     public ResponseEntity addRelationBetweenTwoPerson(@PathVariable("person1-id") int person1Id
-            , @PathVariable("relation") Relation relation, @PathVariable("person2-id") int person2ID) {
-        boolean success=personService.addRelationShipBetweenTwoPerson(person1Id, relation, person2ID);
+            , @PathVariable("relation") Relation relation, @PathVariable("person2-id") int person2Id
+            ,@PathVariable(value = "person3-id",required = false)Integer person3Id) {
+        if(person3Id==null){
+            person3Id=0;
+        }
+        boolean success=personService.addRelationShipBetweenTwoPerson(person1Id, relation, person2Id,person3Id);
         if(success){
             return new ResponseEntity("Relation Created", HttpStatus.OK);
         }else {

@@ -3,6 +3,8 @@ package com.marketpulse.FamilyTree.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Person {
@@ -14,8 +16,9 @@ public class Person {
     @Enumerated(EnumType.ORDINAL)
     Gender gender;
     @JsonIgnore
-    @OneToOne(optional = true,fetch = FetchType.LAZY)
-    HouseHold family;
+    @ManyToMany(targetEntity=HouseHold.class,cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    List<HouseHold> houseHold=new ArrayList<>();
     @JsonIgnore
     @OneToOne(optional = true,fetch = FetchType.LAZY)
     HouseHold parents;
@@ -52,12 +55,12 @@ public class Person {
         this.gender = gender;
     }
 
-    public HouseHold getFamily() {
-        return family;
+    public List<HouseHold> getFamilies() {
+        return houseHold;
     }
 
-    public void setFamily(HouseHold family) {
-        this.family = family;
+    public void setFamilies(List<HouseHold> families) {
+        this.houseHold = families;
     }
 
     public HouseHold getParents() {
