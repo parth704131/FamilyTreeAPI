@@ -1,5 +1,6 @@
 package com.marketpulse.FamilyTree.controllers;
 
+import com.marketpulse.FamilyTree.models.Gender;
 import com.marketpulse.FamilyTree.models.Person;
 import com.marketpulse.FamilyTree.models.Relation;
 import com.marketpulse.FamilyTree.services.PersonService;
@@ -61,5 +62,11 @@ public class FamilyTreeController {
             return new ResponseEntity(person,HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("{id}/wives")
+    public ResponseEntity getNumOfWives(@PathVariable("id") int id){
+        int numOfWives=personService.getNumOfWives(id);
+        return new ResponseEntity(numOfWives,HttpStatus.OK);
     }
 }

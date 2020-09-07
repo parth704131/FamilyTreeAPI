@@ -9,6 +9,8 @@ import com.marketpulse.FamilyTree.repositories.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -136,6 +138,19 @@ public class PersonService {
         }catch (Exception e){
             logger.error("person not found");
             return null;
+        }
+    }
+
+    public int getNumOfWives(int id){
+        int numOfWives=0;
+        try{
+            Person person=personRepository.findById(id).get();
+            if(person.getGender()== Gender.MALE){
+                return person.getFamilies().size();
+            }
+            return numOfWives;
+        }catch (Exception e){
+            return numOfWives;
         }
     }
 }
