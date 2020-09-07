@@ -75,4 +75,11 @@ public class FamilyTreeController {
         int numOfUncles=personService.getNumOfUncles(id);
         return new ResponseEntity(numOfUncles,HttpStatus.OK);
     }
+
+    @GetMapping("{person1-id}/related/{person2-id}")
+    public ResponseEntity checkPersonHaveRelation(@PathVariable("person1-id") int person1ID,
+                                                    @PathVariable("person2-id") int person2ID){
+        boolean IsRelation=personService.checkPersonHaveRelation(person1ID,person2ID);
+        return new ResponseEntity(IsRelation,HttpStatus.OK);
+    }
 }

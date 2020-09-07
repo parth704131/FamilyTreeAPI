@@ -170,4 +170,16 @@ public class PersonService {
             return numOfUncles;
         }
     }
+
+    public boolean checkPersonHaveRelation(int person1ID, int person2ID) {
+        Person person1=personRepository.findById(person1ID).get();
+        Person person2=personRepository.findById(person2ID).get();
+        if(person1.getParents()!=null && person2.getParents()!=null){
+            if(person1.getParents().getId()==person2.getParents().getId()){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 }
