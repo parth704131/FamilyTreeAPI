@@ -153,4 +153,21 @@ public class PersonService {
             return numOfWives;
         }
     }
+
+    public int getNumOfUncles(int id) {
+        int numOfUncles=0;
+        try{
+            Person person=personRepository.findById(id).get();
+            HouseHold parents=person.getParents();
+            HouseHold grandParents=parents.getHusband().getParents();
+            for (int i=0;i<grandParents.getChildren().size();i++){
+                if(grandParents.getChildren().get(i).getGender()==Gender.MALE){
+                    numOfUncles++;
+                }
+            }
+            return numOfUncles-1;
+        }catch (Exception e){
+            return numOfUncles;
+        }
+    }
 }

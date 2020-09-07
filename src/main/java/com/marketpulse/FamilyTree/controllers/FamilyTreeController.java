@@ -69,4 +69,10 @@ public class FamilyTreeController {
         int numOfWives=personService.getNumOfWives(id);
         return new ResponseEntity(numOfWives,HttpStatus.OK);
     }
+
+    @GetMapping("{id}/uncles")
+    public ResponseEntity getNumOfUncles(@PathVariable("id") int id){
+        int numOfUncles=personService.getNumOfUncles(id);
+        return new ResponseEntity(numOfUncles,HttpStatus.OK);
+    }
 }
