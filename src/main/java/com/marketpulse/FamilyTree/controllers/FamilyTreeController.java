@@ -1,6 +1,5 @@
 package com.marketpulse.FamilyTree.controllers;
 
-import com.marketpulse.FamilyTree.models.Gender;
 import com.marketpulse.FamilyTree.models.Person;
 import com.marketpulse.FamilyTree.models.Relation;
 import com.marketpulse.FamilyTree.services.PersonService;
@@ -27,18 +26,18 @@ public class FamilyTreeController {
     }
 
     @PostMapping(value = {"{person1-id}/{relation}/{person2-id}",
-                            "{person1-id}/{relation}/{person2-id}/{person3-id}"})
+            "{person1-id}/{relation}/{person2-id}/{person3-id}"})
     public ResponseEntity addRelationBetweenTwoPerson(@PathVariable("person1-id") int person1Id
             , @PathVariable("relation") Relation relation, @PathVariable("person2-id") int person2Id
-            ,@PathVariable(value = "person3-id",required = false)Integer person3Id) {
-        if(person3Id==null){
-            person3Id=0;
+            , @PathVariable(value = "person3-id", required = false) Integer person3Id) {
+        if (person3Id == null) {
+            person3Id = 0;
         }
-        boolean success=personService.addRelationShipBetweenTwoPerson(person1Id, relation, person2Id,person3Id);
-        if(success){
+        boolean success = personService.addRelationShipBetweenTwoPerson(person1Id, relation, person2Id, person3Id);
+        if (success) {
             return new ResponseEntity("Relation Created", HttpStatus.OK);
-        }else {
-            return new ResponseEntity("Something went Wrong",HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity("Something went Wrong", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -57,35 +56,35 @@ public class FamilyTreeController {
 
     @GetMapping("{id}")
     public ResponseEntity getPerson(@PathVariable("id") int id) {
-        Person person=personService.getPersonById(id);
-        if(person!=null){
-            return new ResponseEntity(person,HttpStatus.OK);
+        Person person = personService.getPersonById(id);
+        if (person != null) {
+            return new ResponseEntity(person, HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("{id}/wives")
-    public ResponseEntity getNumOfWives(@PathVariable("id") int id){
-        int numOfWives=personService.getNumOfWives(id);
-        return new ResponseEntity(numOfWives,HttpStatus.OK);
+    public ResponseEntity getNumOfWives(@PathVariable("id") int id) {
+        int numOfWives = personService.getNumOfWives(id);
+        return new ResponseEntity(numOfWives, HttpStatus.OK);
     }
 
     @GetMapping("{id}/uncles")
-    public ResponseEntity getNumOfUncles(@PathVariable("id") int id){
-        int numOfUncles=personService.getNumOfUncles(id);
-        return new ResponseEntity(numOfUncles,HttpStatus.OK);
+    public ResponseEntity getNumOfUncles(@PathVariable("id") int id) {
+        int numOfUncles = personService.getNumOfUncles(id);
+        return new ResponseEntity(numOfUncles, HttpStatus.OK);
     }
 
     @GetMapping("{person1-id}/related/{person2-id}")
     public ResponseEntity checkPersonHaveRelation(@PathVariable("person1-id") int person1ID,
-                                                    @PathVariable("person2-id") int person2ID){
-        boolean IsRelation=personService.checkPersonHaveRelation(person1ID,person2ID);
-        return new ResponseEntity(IsRelation,HttpStatus.OK);
+                                                  @PathVariable("person2-id") int person2ID) {
+        boolean IsRelation = personService.checkPersonHaveRelation(person1ID, person2ID);
+        return new ResponseEntity(IsRelation, HttpStatus.OK);
     }
 
     @GetMapping("{id}/cousins")
-    public ResponseEntity getNumOfImmediateCousins(@PathVariable("id") int id){
-        int numOfImmediateCousins=personService.getNumOfImmediateCousins(id);
-        return new ResponseEntity(numOfImmediateCousins,HttpStatus.OK);
+    public ResponseEntity getNumOfImmediateCousins(@PathVariable("id") int id) {
+        int numOfImmediateCousins = personService.getNumOfImmediateCousins(id);
+        return new ResponseEntity(numOfImmediateCousins, HttpStatus.OK);
     }
 }

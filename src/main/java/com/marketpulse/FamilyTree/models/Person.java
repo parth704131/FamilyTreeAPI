@@ -16,19 +16,20 @@ public class Person {
     @Enumerated(EnumType.ORDINAL)
     Gender gender;
     @JsonIgnore
-    @ManyToMany(targetEntity=HouseHold.class,cascade = CascadeType.ALL,
+    @ManyToMany(targetEntity = HouseHold.class, cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
-    List<HouseHold> houseHold=new ArrayList<>();
+    List<HouseHold> houseHold = new ArrayList<>();
     @JsonIgnore
-    @OneToOne(optional = true,fetch = FetchType.EAGER)
+    @OneToOne(optional = true, fetch = FetchType.EAGER)
     HouseHold parents;
 
-    public Person(){
+    public Person() {
 
     }
-    public Person(String name,Gender gender) {
-        this.name=name;
-        this.gender=gender;
+
+    public Person(String name, Gender gender) {
+        this.name = name;
+        this.gender = gender;
     }
 
     public int getId() {
