@@ -182,4 +182,39 @@ public class PersonService {
         }
         return false;
     }
+
+    public int getNumOfImmediateCousins(int id) {
+        int numOfCousins=0;
+        Person person=personRepository.findById(id).get();
+        HouseHold parents=person.getParents();
+        if(parents!=null){
+            if(parents.getHusband().getParents()!=null){
+                Person husband=parents.getHusband();
+                numOfCousins = getNumOfCousins(husband);
+                return numOfCousins;
+            }else if(parents.getWife().getParents()!=null){
+                Person wife=parents.getWife();
+                numOfCousins=getNumOfCousins(wife);
+                return numOfCousins;
+            }
+        }
+        return numOfCousins;
+    }
+
+    public int getNumOfCousins(Person person){
+        int numOfCousins=0;
+        HouseHold gradParents=person.getParents();
+        for(int i=0;i<gradParents.getChildren().size();i++){
+            if(person.getId()!=gradParents.getChildren().get(i).getId()){
+                List<HouseHold> families=gradParents.getChildren().get(i).getFamilies();
+                if(families.size()>0){
+                    for(int j=0;j<families.size();j++){
+                        numOfCousins+=families.get(j).getChildren().size();
+                    }
+                    return numOfCousins;
+                }
+            }
+        }
+        return  numOfCousins;
+    }
 }

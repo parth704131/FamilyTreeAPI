@@ -17,10 +17,10 @@ public class Person {
     Gender gender;
     @JsonIgnore
     @ManyToMany(targetEntity=HouseHold.class,cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     List<HouseHold> houseHold=new ArrayList<>();
     @JsonIgnore
-    @OneToOne(optional = true,fetch = FetchType.LAZY)
+    @OneToOne(optional = true,fetch = FetchType.EAGER)
     HouseHold parents;
 
     public Person(){
